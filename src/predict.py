@@ -1,16 +1,12 @@
 import joblib
 import pandas as pd
-
 from src.logger import logger
 
 model = joblib.load("models/model.pkl")
 encoder = joblib.load("models/encoder.pkl")
 
-
 def predict_failure(data):
-
     machine_type = encoder.transform([data.type])[0]
-
     sample = pd.DataFrame(
         [{
             "Type": machine_type,
@@ -24,11 +20,9 @@ def predict_failure(data):
 
     prediction = model.predict(sample)[0]
     probability = model.predict_proba(sample)[0][1]
-
     logger.info(
         f"Prediction={prediction}, Probability={probability:.4f}"
     )
-
     return {
         "machine_failure": int(prediction),
         "prediction": "Failure" if prediction else "No Failure",
